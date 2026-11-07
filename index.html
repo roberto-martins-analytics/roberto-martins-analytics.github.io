@@ -101,6 +101,9 @@ section{padding-block:48px;border-top:1px solid var(--line)}
 .skills ul{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:.93rem}
 .skills li::before{content:"";display:inline-block;width:6px;height:6px;background:var(--accent);margin-right:9px;vertical-align:middle}
 
+.skills-note{margin:-12px 0 20px;color:var(--muted);max-width:60ch}
+.skills>div.dev{background:color-mix(in srgb,var(--accent) 12%,var(--surface))}
+
 /* contato */
 .contact{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px}
 .card{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:16px;display:flex;flex-direction:column;gap:6px;min-width:0}
@@ -141,7 +144,7 @@ footer{padding-top:28px;border-top:1px solid var(--line);display:flex;flex-wrap:
         <tr><td>BFA9C14</td><td>Prata</td><td>8800</td><td>9310</td></tr>
         <tr><td>MZK2H07</td><td class="bad">preto</td><td>45010</td><td>45890</td></tr>
       </table></div>
-      <div class="arrow" aria-hidden="true"><span>Power Query / Python</span><span>→ padroniza texto · valida km · marca exceções</span></div>
+      <div class="arrow" aria-hidden="true"><span>Power Query</span><span>→ padroniza texto · valida km · marca exceções</span></div>
       <header><span class="mono">Saída · pronta para o modelo</span><span class="mono">3 linhas</span></header>
       <div class="scroll"><table>
         <tr><th>placa</th><th>cor</th><th>km_rodado</th><th>alerta</th></tr>
@@ -156,13 +159,14 @@ footer{padding-top:28px;border-top:1px solid var(--line);display:flex;flex-wrap:
     <div class="sec-head"><span class="mono">01 · Sobre</span><h2>Dado limpo primeiro, gráfico depois</h2></div>
     <div class="about">
       <div>
-        <p id="about-1">Meu foco é organizar dados e automatizar rotinas. Gosto de pegar uma fonte confusa, entender como o negócio usa a informação e entregar um modelo confiável, com indicadores que a equipe consegue explicar.</p>
-        <p id="about-2">Aqui estão painéis de BI e projetos de prática. Os exemplos usam uma base fictícia de locadora de veículos que montei para treinar análises de frota, multas, manutenção e satisfação do cliente.</p>
+        <p id="about-1">Meu foco é organizar dados e automatizar rotinas. No dia a dia uso Excel, Power BI, Power Query e Power Automate, e conto com IA (Claude e Lovable) para acelerar análises e criar ferramentas. Gosto de pegar uma fonte confusa, entender como o negócio usa a informação e entregar um modelo confiável, com indicadores que a equipe consegue explicar.</p>
+        <p id="about-2">Estou aprofundando a base na trilha de dados da Hashtag Treinamentos (Power BI, SQL, Excel e mais) e comecei agora a graduação em Ciência de Dados. Os projetos abaixo são exemplos de prática, feitos com uma base fictícia de locadora de veículos criada para treinar análises de frota, multas, manutenção e satisfação do cliente.</p>
       </div>
       <dl class="facts">
         <div><dt>Foco</dt><dd>Organização de dados e automação</dd></div>
         <div><dt>Ferramenta principal</dt><dd>Power BI</dd></div>
-        <div><dt>Objetivo</dt><dd>Análise de dados e BI</dd></div>
+        <div><dt>Formação</dt><dd>Ciência de Dados (cursando)</dd></div>
+        <div><dt>Cursos</dt><dd>Hashtag Treinamentos, trilha de dados</dd></div>
       </dl>
     </div>
   </section>
@@ -174,12 +178,13 @@ footer{padding-top:28px;border-top:1px solid var(--line);display:flex;flex-wrap:
   </section>
 
   <section id="competencias">
-    <div class="sec-head"><span class="mono">03 · Competências</span><h2>O que uso no dia a dia</h2></div>
+    <div class="sec-head"><span class="mono">03 · Competências</span><h2>O que uso hoje e o que estou aprendendo</h2></div>
+    <p class="skills-note">As três primeiras colunas são o que já uso no dia a dia. A última é o que estou aprendendo agora.</p>
     <div class="skills">
-      <div><h3>Business Intelligence</h3><ul><li>Power BI (modelagem e relatórios)</li><li>DAX: medidas e inteligência de tempo</li><li>Modelo estrela, relacionamentos</li><li>Design de dashboards</li></ul></div>
-      <div><h3>Dados</h3><ul><li>Power Query (M)</li><li>SQL</li><li>Excel avançado</li><li>Qualidade e validação de dados</li></ul></div>
-      <div><h3>Automação</h3><ul><li>Python (pandas)</li><li>Atualização agendada de relatórios</li><li>Rotinas de carga e conferência</li><li>Alertas por exceção</li></ul></div>
-      <div><h3>Em desenvolvimento</h3><ul><li>Estatística aplicada</li><li>Machine Learning</li><li>Engenharia de dados</li><li>Storytelling com dados</li></ul></div>
+      <div><h3>BI e análise</h3><ul><li>Power BI</li><li>Excel</li></ul></div>
+      <div><h3>Preparação de dados</h3><ul><li>Power Query</li></ul></div>
+      <div><h3>Automação e IA</h3><ul><li>Power Automate</li><li>Claude</li><li>Lovable</li></ul></div>
+      <div class="dev"><h3>Em desenvolvimento</h3><ul><li>SQL</li><li>Trilha de dados (Hashtag Treinamentos)</li><li>Graduação em Ciência de Dados</li><li>Estatística e Machine Learning</li></ul></div>
     </div>
   </section>
 
@@ -209,8 +214,8 @@ var PROJETOS = [
    descricao:"Multas por 1.000 km, infrações mais comuns, multas vencidas e perfil dos condutores reincidentes.",
    kpis:[["Multas","21,4 mil"],["Tipos","15"]], ferramentas:["SQL","Power BI"], link:""},
   {titulo:"Rotina de limpeza e conferência", area:"Automação", exemplo:true,
-   descricao:"Script que padroniza textos, valida quilometragem e gera uma lista de exceções para revisão antes da carga no modelo.",
-   kpis:[["Regras","4"],["Execução","diária"]], ferramentas:["Python","Power Query"], link:""}
+   descricao:"Rotina que padroniza textos, valida quilometragem e gera uma lista de exceções para revisão antes da carga no modelo.",
+   kpis:[["Regras","4"],["Execução","diária"]], ferramentas:["Power Query","Power Automate"], link:""}
 ];
 /* Para trocar o nome e os contatos, altere os textos no HTML acima. */
 
