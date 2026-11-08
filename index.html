@@ -94,6 +94,20 @@ section{padding-block:48px;border-top:1px solid var(--line)}
 .proj .link{font-weight:600;font-size:.92rem}
 .example{font:500 .68rem var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 
+/* painel incorporado */
+.thumbbtn{display:block;padding:0;border:0;background:none;cursor:pointer;width:100%;position:relative}
+.thumbbtn .thumb{border-bottom:1px solid var(--line)}
+.thumbbtn .play{position:absolute;right:12px;bottom:12px;font:600 .74rem var(--f-mono);background:var(--accent);color:var(--accent-ink);padding:6px 10px;border-radius:99px}
+.acts{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.acts button.link{font:600 .92rem var(--f-body,inherit);background:var(--accent);color:var(--accent-ink);border:0;border-radius:6px;padding:8px 14px;cursor:pointer}
+dialog.dash{width:min(1200px,96vw);max-height:94vh;padding:0;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg)}
+dialog.dash::backdrop{background:rgba(5,10,16,.75)}
+.dash .bar{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line)}
+.dash .bar strong{font-size:1rem;min-width:0}
+.dash .bar div{display:flex;gap:12px;align-items:center;flex-shrink:0}
+.dash .x{font:600 .85rem var(--f-mono);background:none;border:1px solid var(--line);color:var(--fg);border-radius:6px;padding:6px 12px;cursor:pointer}
+.dash iframe{display:block;width:100%;aspect-ratio:16/9;max-height:calc(94vh - 52px);border:0;background:#0F161D}
+
 /* competências */
 .skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:0;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
 .skills>div{padding:18px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);margin:0 -1px -1px 0;min-width:0}
@@ -200,13 +214,17 @@ footer{padding-top:28px;border-top:1px solid var(--line);display:flex;flex-wrap:
   <footer><span class="mono">Os dados dos projetos de exemplo são fictícios.</span><span class="mono" id="year"></span></footer>
 </div>
 
+<dialog class="dash" id="dash" aria-label="Painel interativo"><div class="bar"><strong id="dash-t"></strong><div><a id="dash-open" href="#" target="_blank" rel="noopener">Abrir em tela cheia ↗</a><button class="x" type="button" id="dash-x">Fechar</button></div></div><iframe id="dash-f" title="Painel Power BI" loading="lazy" allowfullscreen></iframe></dialog>
+
 <script>
 /* ===== EDITE AQUI: seus projetos =====
-   titulo, descricao, kpis [[rotulo, valor]], ferramentas, area (filtro), link (URL do Power BI publicado), exemplo (true = marca como exemplo) */
+   titulo, descricao, kpis [[rotulo, valor]], ferramentas, area (filtro), link (URL do Power BI publicado), embed (true = abre o painel dentro do site), imagem (arquivo de print na mesma pasta), exemplo (true = marca como exemplo) */
 var PROJETOS = [
   {titulo:"Visão executiva da frota", area:"Power BI", exemplo:true,
-   descricao:"Utilização, receita por veículo, tempo parado em oficina e ranking de filiais, com comparação entre períodos.",
-   kpis:[["Locações","82,9 mil"],["Veículos","1.800"]], ferramentas:["Power BI","DAX","Modelo estrela"], link:""},
+   descricao:"Painel com receita mensal contra o ano anterior, receita por categoria, status da frota, NPS no tempo e multas por faixa de risco de condutor. Modelo estrela, medidas em DAX e cartões em HTML.",
+   kpis:[["Receita","R$ 142 mi"],["Locações","77 mil"],["Frota","1.062"]], ferramentas:["Power BI","DAX","Modelo estrela","HTML"],
+   link:"https://app.powerbi.com/view?r=eyJrIjoiZWE0ZGFhNGMtYzc4Mi00ODFiLWEzZjUtNTNhZjUwN2FlMGEwIiwidCI6ImM5NmQzZGU2LTY0NzMtNDJhMy1hYjNlLWU0ZTA0ZGM4MmY5ZiJ9",
+   embed:true, imagem:"visao-geral.jpg"},
   {titulo:"NPS e experiência do cliente", area:"Power BI", exemplo:true,
    descricao:"Evolução do NPS por filial e categoria, motivos de detratores e relação com atraso na devolução e multas.",
    kpis:[["NPS","+25"],["Respostas","22,5 mil"]], ferramentas:["Power BI","DAX"], link:""},
@@ -237,9 +255,14 @@ var PROJETOS = [
     grid.innerHTML=PROJETOS.filter(function(p){return atual==='Todos'||p.area===atual}).map(function(p,i){
       var k=p.kpis.map(function(x){return '<span>'+esc(x[0])+' <b>'+esc(x[1])+'</b></span>'}).join('');
       var t=p.ferramentas.map(function(x){return '<span class="tag">'+esc(x)+'</span>'}).join('');
-      var l=p.link?'<a class="link" href="'+esc(p.link)+'" target="_blank" rel="noopener">Abrir dashboard →</a>':'<span class="example">Link do dashboard em breve</span>';
-      return '<article class="proj">'+thumb(i+3)+'<div class="body">'+(p.exemplo?'<span class="example">Exemplo com dados fictícios</span>':'')+
-        '<h3>'+esc(p.titulo)+'</h3><p>'+esc(p.descricao)+'</p><div class="kpis">'+k+'</div><div class="tags">'+t+'</div>'+l+'</div></article>';
+      var acts, th=thumb(i+3);
+      if(p.link&&p.embed){
+        acts='<div class="acts"><button class="link" type="button" data-open="'+esc(p.link)+'" data-t="'+esc(p.titulo)+'">Ver painel interativo</button><a class="link" href="'+esc(p.link)+'" target="_blank" rel="noopener">Tela cheia ↗</a></div>';
+        if(p.imagem) th='<button class="thumbbtn" type="button" data-open="'+esc(p.link)+'" data-t="'+esc(p.titulo)+'" aria-label="Abrir painel interativo: '+esc(p.titulo)+'"><img class="thumb" src="'+esc(p.imagem)+'" alt="Print do painel '+esc(p.titulo)+'" loading="lazy"><span class="play">▶ Interagir</span></button>';
+      } else if(p.link){ acts='<a class="link" href="'+esc(p.link)+'" target="_blank" rel="noopener">Abrir dashboard →</a>'; }
+      else { acts='<span class="example">Link do dashboard em breve</span>'; }
+      return '<article class="proj">'+th+'<div class="body">'+(p.exemplo?'<span class="example">Exemplo com dados fictícios</span>':'')+
+        '<h3>'+esc(p.titulo)+'</h3><p>'+esc(p.descricao)+'</p><div class="kpis">'+k+'</div><div class="tags">'+t+'</div>'+acts+'</div></article>';
     }).join('');
   }
   function renderChips(){
@@ -247,6 +270,17 @@ var PROJETOS = [
   }
   chips.addEventListener('click',function(e){var b=e.target.closest('.chip'); if(!b)return; atual=b.getAttribute('data-a'); renderChips(); render();});
   renderChips(); render();
+  var dlg=document.getElementById('dash'), fr=document.getElementById('dash-f');
+  grid.addEventListener('click',function(e){var b=e.target.closest('[data-open]'); if(!b)return;
+    document.getElementById('dash-t').textContent=b.getAttribute('data-t');
+    document.getElementById('dash-open').href=b.getAttribute('data-open');
+    fr.src=b.getAttribute('data-open');
+    if(dlg.showModal){dlg.showModal()}else{window.open(b.getAttribute('data-open'),'_blank')}
+  });
+  function fechar(){fr.src='about:blank'; if(dlg.open)dlg.close()}
+  document.getElementById('dash-x').addEventListener('click',fechar);
+  dlg.addEventListener('close',function(){fr.src='about:blank'});
+  dlg.addEventListener('click',function(e){if(e.target===dlg)fechar()});
 
   document.querySelectorAll('[data-copy]').forEach(function(btn){
     btn.addEventListener('click',function(){
